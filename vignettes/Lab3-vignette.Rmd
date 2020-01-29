@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Lab3-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  
 ---
 
 ```{r, include = FALSE}
@@ -13,6 +14,11 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+# Hint
+$$Example \:\: 2.1$$
+
+
 
 # Task 1
 
@@ -25,27 +31,67 @@ getwd()
 
 ## Rotation in Matrix format
 
-$$\tilde{X}=\pmatrix{
+$$\tilde {\textbf {X}}=\pmatrix{
 cos(\theta) & sin(\theta)\\
 -sin(\theta) & cos(\theta)\\
-}X$$
+}\textbf X$$
 
 ## Function
+
+### $\tilde {\textbf {X}}$ Function
+```{r , }
+library(mvtnorm)
+myxtilde = function(X,theta){
+  cth = cos(theta)
+  sth = sin(theta)
+  mv = c(cth,-sth,sth,cth)
+  Rt = matrix(mv,nr=2,nc=2, byrow=FALSE)
+  Xt = Rt%*%t(X)
+  t(Xt)
+  #list(x1t = Xt[1,], x2t = Xt[2,])
+}
+varcov = matrix(c(100,100,100,400), nr=2,nc=2)
+set.seed(24)
+X = rmvnorm(100, mean=c(0,0), sigma=varcov)
+Xt=myxtilde(X, 1.276795)
+Xc=rbind(X,Xt)
+n=dim(Xc)[1]
+par(pty="s")
+plot(Xc[,1],Xc[,2], 
+     col = rep(c("red", "blue"), 
+               c(n/2,n/2)),
+     asp=1,
+     pch=19,
+     xlab = "X1",
+     ylab = "X2",
+     main = paste("Rotation of ", 1.276795))
+```
+
+### $\tilde{x_1}, \tilde{x_2}$ Function
 
 ```{r , }
 if(!require("mvtnorm")) install.packages("mvtnorm")
 
 my.tilde=function(x1,x2,theta){ # x1,2 vectors, theta scalar
-  x1t=
-    x2t=-x1*sin(theta)+x2*cos(theta)
-  list(x1t=x1t,x2t=x2t)
+  x1t= x1*cos(theta) + x2*sin(theta)
+  x2t=-x1*sin(theta) + x2*cos(theta)
+  obj = list(x1t=x1t,x2t=x2t)
 }
 set.seed(24) #  this will ensure everyone gets the same results
 my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
 
 
+Xt = my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
+
+ggplot2::ggplot(x1)
+```
+
+
+
+
 #Task 3
 
+```{r}
 # The function below is what we want to find the zero of
 myfun=function(x) 400*sin(x)*cos(x) +200*(cos(x)^2-sin(x)^2)
 
