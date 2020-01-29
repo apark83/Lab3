@@ -14,3 +14,5 @@ Suggests:
     rmarkdown,
     mvtnorm
 VignetteBuilder: knitr
+URL: https://github.com/apark83/Lab3
+BugReports: https://github.com/apark83/Lab3/issues
