@@ -38,6 +38,31 @@ cos(\theta) & sin(\theta)\\
 
 ## Function
 
+### $\tilde{x_1}, \tilde{x_2}$ Function
+
+```{r , }
+if(!require("mvtnorm")) install.packages("mvtnorm")
+
+my.tilde=function(x1,x2,theta){ # x1,2 vectors, theta scalar
+  x1t= x1*cos(theta) + x2*sin(theta)
+  x2t=-x1*sin(theta) + x2*cos(theta)
+  obj = list(x1t=x1t,x2t=x2t)
+  return(obj)
+}
+
+
+set.seed(24) #  this will ensure everyone gets the same results
+my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
+
+
+# Xt <- as.data.frame(my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6))
+#   # Xt; min(Xt[,1]); max(Xt[,1]); min(Xt[,2]); max(Xt[,2])
+# 
+# library(ggplot2)
+# ggplot(Xt, aes(x1t, x2t)) + geom_point()
+```
+
+
 ### $\tilde {\textbf {X}}$ Function
 ```{r , }
 library(mvtnorm)
@@ -50,6 +75,8 @@ myxtilde = function(X,theta){
   t(Xt)
   #list(x1t = Xt[1,], x2t = Xt[2,])
 }
+
+
 varcov = matrix(c(100,100,100,400), nr=2,nc=2)
 set.seed(24)
 X = rmvnorm(100, mean=c(0,0), sigma=varcov)
@@ -57,6 +84,9 @@ Xt=myxtilde(X, 1.276795)
 Xc=rbind(X,Xt)
 n=dim(Xc)[1]
 par(pty="s")
+
+# make a scatter plot
+
 plot(Xc[,1],Xc[,2], 
      col = rep(c("red", "blue"), 
                c(n/2,n/2)),
@@ -67,24 +97,6 @@ plot(Xc[,1],Xc[,2],
      main = paste("Rotation of ", 1.276795))
 ```
 
-### $\tilde{x_1}, \tilde{x_2}$ Function
-
-```{r , }
-if(!require("mvtnorm")) install.packages("mvtnorm")
-
-my.tilde=function(x1,x2,theta){ # x1,2 vectors, theta scalar
-  x1t= x1*cos(theta) + x2*sin(theta)
-  x2t=-x1*sin(theta) + x2*cos(theta)
-  obj = list(x1t=x1t,x2t=x2t)
-}
-set.seed(24) #  this will ensure everyone gets the same results
-my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
-
-
-Xt = my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
-
-ggplot2::ggplot(x1)
-```
 
 
 
