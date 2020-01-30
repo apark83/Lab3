@@ -1,0 +1,151 @@
+---
+title: "Lab_3_4793_AGP"
+author: "Austin Parker"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "Lab3-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab3-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Hint
+$$Example \:\: 2.1$$
+
+
+
+# Task 1
+
+```{r setup}
+library(Lab3)
+getwd()
+```
+
+# Task 2
+
+## Rotation in Matrix format
+
+$$
+\tilde {\textbf {X}}=\pmatrix{
+cos(\theta) & sin(\theta)\\
+-sin(\theta) & cos(\theta)\\
+}\textbf X
+$$
+
+## Function
+
+### $\tilde{x_1}, \tilde{x_2}$ Function
+
+```{r , }
+if(!require("mvtnorm")) install.packages("mvtnorm")
+
+my.tilde=function(x1,x2,theta){ # x1,2 vectors, theta scalar
+  x1t= x1*cos(theta) + x2*sin(theta)
+  x2t=-x1*sin(theta) + x2*cos(theta)
+  obj = list(x1t=x1t,x2t=x2t)
+  return(obj)
+}
+
+
+set.seed(24) #  this will ensure everyone gets the same results
+my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
+
+
+# Xt <- as.data.frame(my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6))
+#   # Xt; min(Xt[,1]); max(Xt[,1]); min(Xt[,2]); max(Xt[,2])
+# 
+# library(ggplot2)
+# ggplot(Xt, aes(x1t, x2t)) + geom_point()
+```
+
+
+### $\tilde {\textbf {X}}$ Function
+```{r , }
+library(mvtnorm)
+myxtilde = function(X,theta){
+  cth = cos(theta)
+  sth = sin(theta)
+  mv = c(cth,-sth,sth,cth)
+  Rt = matrix(mv,nr=2,nc=2, byrow=FALSE)
+  Xt = Rt%*%t(X)
+  t(Xt)
+  #list(x1t = Xt[1,], x2t = Xt[2,])
+}
+
+
+varcov = matrix(c(100,100,100,400), nr=2,nc=2)
+set.seed(24)
+X = rmvnorm(100, mean=c(0,0), sigma=varcov)
+Xt=myxtilde(X, 1.276795)
+Xc=rbind(X,Xt)
+n=dim(Xc)[1]
+par(pty="s")
+
+# make a scatter plot
+
+plot(Xc[,1],Xc[,2], 
+     col = rep(c("red", "blue"), 
+               c(n/2,n/2)),
+     asp=1,
+     pch=19,
+     xlab = "X1",
+     ylab = "X2",
+     main = paste("Rotation of ", 1.276795))
+```
+
+
+
+
+
+#Task 3
+
+```{r}
+# The function below is what we want to find the zero of
+myfun=function(x) 400*sin(x)*cos(x) +200*(cos(x)^2-sin(x)^2)
+
+# The Newton-Raphson algorithm function
+my.newt=function(x0,f=myfun,delta=0.0001,epsilon=1e-12){
+  # x0 initial value
+  #f the function to be zeroed
+  #delta is the increment in the derivative
+  #epsilon is how close our approximation is to zero
+fdash=function(x) (f(x+delta)-f(x))/delta
+
+d=... # initial values
+i=0
+x=c() # empty vector
+y=...
+x[1]=x0 # assign initial guess
+y[1]=f(x[1]) # initial y value
+while(d > epsilon & i<100){ # ensures that it doesnt loop too much
+  i=i+1 
+  x[i+1]= ...# NR step
+  y[i+1]=f(x[i+1]) # update y value
+  d=...(y[i+1]) # update d
+}
+...
+}
+
+```
+
