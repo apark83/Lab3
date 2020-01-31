@@ -12,28 +12,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
----
-title: "Lab3-vignette"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Lab3-vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-  
----
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 
 # Hint
 $$Example \:\: 2.1$$
 
-
+2 pics in markdown for (+) and (-) covariance for shiny to show theta goes thru zero
 
 # Task 1
 
@@ -69,7 +52,7 @@ my.tilde=function(x1,x2,theta){ # x1,2 vectors, theta scalar
 
 
 set.seed(24) #  this will ensure everyone gets the same results
-my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
+m=my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6)
 
 
 # Xt <- as.data.frame(my.tilde(x1=rnorm(100),x2=rnorm(100),theta=pi/6))
@@ -96,6 +79,7 @@ myxtilde = function(X,theta){
 
 varcov = matrix(c(100,100,100,400), nr=2,nc=2)
 set.seed(24)
+
 X = rmvnorm(100, mean=c(0,0), sigma=varcov)
 Xt=myxtilde(X, 1.276795)
 Xc=rbind(X,Xt)
@@ -122,7 +106,7 @@ plot(Xc[,1],Xc[,2],
 
 ```{r}
 # The function below is what we want to find the zero of
-myfun=function(x) 400*sin(x)*cos(x) +200*(cos(x)^2-sin(x)^2)
+myfun=function(x) 300*sin(x)*cos(x) + 100*(cos(x)^2-sin(x)^2)
 
 # The Newton-Raphson algorithm function
 my.newt=function(x0,f=myfun,delta=0.0001,epsilon=1e-12){
@@ -132,20 +116,23 @@ my.newt=function(x0,f=myfun,delta=0.0001,epsilon=1e-12){
   #epsilon is how close our approximation is to zero
 fdash=function(x) (f(x+delta)-f(x))/delta
 
-d=... # initial values
+d=x0 # initial values
 i=0
 x=c() # empty vector
-y=...
+y=c() # store y-values in a vector 
 x[1]=x0 # assign initial guess
 y[1]=f(x[1]) # initial y value
 while(d > epsilon & i<100){ # ensures that it doesnt loop too much
   i=i+1 
-  x[i+1]= ...# NR step
+  x[i+1]= x[i] - myfun(x[i])/fdash(x[i])# NR step
   y[i+1]=f(x[i+1]) # update y value
-  d=...(y[i+1]) # update d
+  d=abs((y[i]) - (y[i+1])) # update d
 }
-...
+return(list(x=x, y=y, x.i = x[i], y.i = y[i]))
 }
 
+newt.raph = my.newt(x0 = 1, f = myfun)
+newt.raph
 ```
 
+##Correlation corresponding to $s_{ik}$, in other words $r_{ik}$
