@@ -8,9 +8,7 @@ output:
     toc_float: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 
 # Hint
@@ -102,7 +100,7 @@ plot(Xc[,1],Xc[,2],
 
 
 
-#Task 3
+# Task 3
 
 ```{r}
 # The function below is what we want to find the zero of
@@ -135,4 +133,63 @@ newt.raph = my.newt(x0 = 1, f = myfun)
 newt.raph
 ```
 
-##Correlation corresponding to $s_{ik}$, in other words $r_{ik}$
+## Correlation corresponding to $s_{ik}$, in other words $r_{ik}$
+
+```{r}
+library(Lab1)
+
+varcov[1,2] / (sqrt(varcov[1,1]) * sqrt(varcov[2,2]))
+
+
+```
+
+# Roots from $(0, 2 \pi)$
+
+```{r}
+
+roots = vector(mode = "numeric", length = 4) 
+roots <- c(1.255792, 2.833629, 4.411466, 5.970293)
+roots
+
+  root = vector(mode = "numeric", length = 4) 
+
+
+newt.raph1 = my.newt(roots[1], f = myfun)
+root[1] <- newt.raph1$x.i
+
+newt.raph2 = my.newt(roots[2], f = myfun)
+root[2] <- newt.raph2$x.i
+
+newt.raph3 = my.newt(roots[3], f = myfun)
+root[3] <- newt.raph3$x.i
+
+newt.raph4 = my.newt(roots[4], f = myfun)
+root[4] <- newt.raph4$x.i
+
+root
+```
+
+## Plot $\tilde s_{12}$
+
+```{r}
+library(ggplot2)
+
+ggplot(data = data.frame(x = c(0,2*pi)), aes(x)) +
+  stat_function(fun = myfun, color = 'blue') +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = 0) +
+  xlab("theta (in radians)") +
+  ylab("f(theta)") +
+  geom_text(x = root[1], y = 20, label = root[1]) +
+  geom_text(x = root[2], y = 20, label = root[2]) +
+  geom_text(x = root[3], y = 20, label = root[3]) +
+  geom_text(x = root[4], y = 20, label = root[4])
+```
+
+# Task 4
+
+```{r}
+uniroot(f = myfun, interval = c(0, 2))
+```
+
+

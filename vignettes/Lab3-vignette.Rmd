@@ -31,10 +31,12 @@ getwd()
 
 ## Rotation in Matrix format
 
-$$\tilde {\textbf {X}}=\pmatrix{
+$$
+\tilde {\textbf {X}}=\pmatrix{
 cos(\theta) & sin(\theta)\\
 -sin(\theta) & cos(\theta)\\
-}\textbf X$$
+}\textbf X
+$$
 
 ## Function
 

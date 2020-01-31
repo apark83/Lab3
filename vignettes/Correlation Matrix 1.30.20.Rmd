@@ -1,0 +1,26 @@
+---
+title: "Correlation Matrix 1.30.20"
+author: "Austin Parker"
+date: "1/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+Sigma = matrix(c(4,1,2,1,9,-3,2,-3,25), nrow = 3, ncol = 3, byrow = T); Sigma
+
+V = matrix(0, nrow = 3, ncol = 3); V
+  diag(V) = sqrt(diag(Sigma)); V
+  
+rho = solve(V) %*% Sigma %*% solve(V); rho
+```
+
+```{r}
+X = matrix(data = c(4,1,-1,3,3,5), nrow = 3, ncol = 2, byrow = T); X
+Xbar = colMeans(X); Xbar
+
+```
+
